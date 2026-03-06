@@ -1,5 +1,4 @@
 <?php
-// php/minhas_avaliacoes_api.php
 session_start();
 require_once 'db.php';
 require_once 'auth.php';

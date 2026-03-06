@@ -1,10 +1,10 @@
 <?php
-// php/db.php - Database connection via PDO
+
 
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'cinerate');
-define('DB_USER', 'root');       // alterar conforme seu ambiente
-define('DB_PASS', 'admin');           // alterar conforme seu ambiente
+define('DB_USER', 'root');       
+define('DB_PASS', 'admin');           
 define('DB_CHARSET', 'utf8mb4');
 
 function getDB(): PDO {

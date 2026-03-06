@@ -1,5 +1,4 @@
 <?php
-// php/avaliacoes_api.php
 session_start();
 require_once 'db.php';
 require_once 'auth.php';
@@ -8,7 +7,6 @@ header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
 $db = getDB();
 
-// POST: add review
 if ($method === 'POST') {
     requireLogin('../login.php');
     $data = json_decode(file_get_contents('php://input'), true) ?: $_POST;
@@ -22,11 +20,9 @@ if ($method === 'POST') {
         exit;
     }
 
-    // Check if already reviewed
     $check = $db->prepare('SELECT id FROM avaliacoes WHERE titulo_id = ? AND usuario_id = ?');
     $check->execute([$titulo_id, $_SESSION['user_id']]);
     if ($check->fetch()) {
-        // Update existing
         $stmt = $db->prepare('UPDATE avaliacoes SET nota=?, comentario=?, criado_em=NOW() WHERE titulo_id=? AND usuario_id=?');
         $stmt->execute([$nota, $comentario, $titulo_id, $_SESSION['user_id']]);
     } else {
@@ -38,7 +34,6 @@ if ($method === 'POST') {
     exit;
 }
 
-// DELETE: remove review (admin or owner)
 if ($method === 'DELETE') {
     requireLogin('../login.php');
     $id = (int)($_GET['id'] ?? 0);

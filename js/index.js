@@ -1,9 +1,6 @@
-// js/index.js - Home page content loader
-
 let currentTipo = "";
 let searchQuery = "";
 
-// Read URL params on load
 const params = new URLSearchParams(window.location.search);
 if (params.get("tipo")) {
   currentTipo = params.get("tipo");
@@ -18,7 +15,6 @@ async function loadContent() {
   area.innerHTML =
     '<div class="loader"><div class="spinner"></div> Carregando...</div>';
 
-  // Update section heading
   const headingMap = {
     "": "TODOS OS",
     filme: "FILMES",
@@ -35,7 +31,6 @@ async function loadContent() {
   if (h)
     h.innerHTML = `${headingMap[currentTipo] || ""} <span>${headingLabel[currentTipo] === "" ? currentTipo.toUpperCase() : "TÍTULOS"}</span>`;
 
-  // Update active filter tab
   document.querySelectorAll(".filter-tab").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.tipo === currentTipo);
   });
@@ -97,7 +92,6 @@ function escHTML(str) {
     .replace(/"/g, "&quot;");
 }
 
-// Filter tabs
 document.querySelectorAll(".filter-tab").forEach((btn) => {
   btn.addEventListener("click", () => {
     currentTipo = btn.dataset.tipo;
@@ -105,12 +99,10 @@ document.querySelectorAll(".filter-tab").forEach((btn) => {
   });
 });
 
-// Set correct active tab from URL param
 document.querySelectorAll(".filter-tab").forEach((btn) => {
   btn.classList.toggle("active", btn.dataset.tipo === currentTipo);
 });
 
-// Search
 function doSearch() {
   searchQuery = document.getElementById("search-input").value.trim();
   loadContent();
@@ -121,5 +113,4 @@ document.getElementById("search-input").addEventListener("keydown", (e) => {
   if (e.key === "Enter") doSearch();
 });
 
-// Carrega o conteúdo inicial
 loadContent();

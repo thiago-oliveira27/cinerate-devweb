@@ -1,5 +1,4 @@
 <?php
-// php/titulos_api.php - AJAX API for titles
 session_start();
 require_once 'db.php';
 require_once 'auth.php';
@@ -10,13 +9,11 @@ $action = $_GET['action'] ?? '';
 
 $db = getDB();
 
-// ---- GET: list / search ----
 if ($method === 'GET') {
     $tipo   = $_GET['tipo'] ?? '';
     $busca  = $_GET['busca'] ?? '';
     $id     = $_GET['id'] ?? '';
 
-    // Single item
     if ($id) {
         $stmt = $db->prepare(
             'SELECT t.*, u.nome AS cadastrado_por,
@@ -32,7 +29,6 @@ if ($method === 'GET') {
         $item = $stmt->fetch();
         if (!$item) { echo json_encode(['error' => 'Não encontrado.']); exit; }
 
-        // fetch comments
         $cmt = $db->prepare(
             'SELECT a.id, a.nota, a.comentario, a.criado_em, u.nome AS autor, a.usuario_id
              FROM avaliacoes a JOIN usuarios u ON u.id = a.usuario_id
@@ -45,7 +41,6 @@ if ($method === 'GET') {
         exit;
     }
 
-    // List
     $sql    = 'SELECT t.id, t.titulo, t.genero, t.ano, t.tipo, t.poster_url,
                ROUND(AVG(a.nota), 1) AS nota_media,
                COUNT(a.id) AS total_avaliacoes
@@ -70,7 +65,6 @@ if ($method === 'GET') {
     exit;
 }
 
-// ---- POST: create ----
 if ($method === 'POST') {
     requireLogin('../login.php');
     $data = json_decode(file_get_contents('php://input'), true) ?: $_POST;
@@ -96,13 +90,11 @@ if ($method === 'POST') {
     exit;
 }
 
-// ---- PUT: update ----
 if ($method === 'PUT') {
     requireLogin('../login.php');
     $data = json_decode(file_get_contents('php://input'), true);
     $id   = (int)($data['id'] ?? 0);
 
-    // check ownership or admin
     $row = $db->prepare('SELECT usuario_id FROM titulos WHERE id = ?');
     $row->execute([$id]);
     $t = $row->fetch();
@@ -126,7 +118,6 @@ if ($method === 'PUT') {
     exit;
 }
 
-// ---- DELETE ----
 if ($method === 'DELETE') {
     requireAdmin('../index.php');
     $id = (int)($_GET['id'] ?? 0);

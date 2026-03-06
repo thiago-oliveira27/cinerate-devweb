@@ -1,5 +1,4 @@
 <?php
-// php/session.php - Returns current session as JSON (used by JS)
 header('Content-Type: application/json');
 session_start();
 

@@ -1,5 +1,5 @@
 <?php
-// php/admin_api.php
+
 session_start();
 require_once 'db.php';
 require_once 'auth.php';
@@ -9,7 +9,7 @@ requireAdmin('../index.php');
 $db = getDB();
 $method = $_SERVER['REQUEST_METHOD'];
 
-// GET: list users
+
 if ($method === 'GET') {
     $stmt = $db->query(
         'SELECT u.id, u.nome, u.email, u.admin, u.criado_em,
@@ -24,7 +24,7 @@ if ($method === 'GET') {
     exit;
 }
 
-// DELETE: remove user
+
 if ($method === 'DELETE') {
     $id = (int)($_GET['id'] ?? 0);
     if ($id === $_SESSION['user_id']) {

@@ -1,5 +1,4 @@
 <?php
-// php/perfil_api.php
 session_start();
 require_once 'db.php';
 require_once 'auth.php';
@@ -9,7 +8,6 @@ requireLogin('../login.php');
 $db = getDB();
 $method = $_SERVER['REQUEST_METHOD'];
 
-// GET: current user data
 if ($method === 'GET') {
     $stmt = $db->prepare('SELECT id, nome, email, admin, criado_em FROM usuarios WHERE id = ?');
     $stmt->execute([$_SESSION['user_id']]);
@@ -17,7 +15,6 @@ if ($method === 'GET') {
     exit;
 }
 
-// PUT: update profile
 if ($method === 'PUT') {
     $data  = json_decode(file_get_contents('php://input'), true);
     $nome  = trim($data['nome'] ?? '');
@@ -29,7 +26,6 @@ if ($method === 'PUT') {
         exit;
     }
 
-    // Check email uniqueness (excluding current user)
     $check = $db->prepare('SELECT id FROM usuarios WHERE email = ? AND id != ?');
     $check->execute([$email, $_SESSION['user_id']]);
     if ($check->fetch()) {
@@ -51,11 +47,9 @@ if ($method === 'PUT') {
     exit;
 }
 
-// DELETE: delete own account
 if ($method === 'DELETE') {
     $uid = $_SESSION['user_id'];
     $db->prepare('DELETE FROM avaliacoes WHERE usuario_id = ?')->execute([$uid]);
-    // Titles registered by user: keep but nullify user reference or delete
     $db->prepare('UPDATE titulos SET usuario_id = NULL WHERE usuario_id = ?')->execute([$uid]);
     $db->prepare('DELETE FROM usuarios WHERE id = ?')->execute([$uid]);
     session_destroy();

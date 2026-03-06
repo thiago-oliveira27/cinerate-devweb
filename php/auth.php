@@ -1,5 +1,4 @@
 <?php
-// php/auth.php - Authentication helper functions
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 function isLoggedIn(): bool {

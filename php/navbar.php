@@ -1,5 +1,4 @@
 <?php
-// php/navbar.php - Shared navbar include
 if (session_status() === PHP_SESSION_NONE) session_start();
 $base = $base ?? '';
 ?>
